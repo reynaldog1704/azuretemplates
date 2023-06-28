@@ -1,0 +1,211 @@
+{
+  "$schema" : "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion" : "1.0.0.0",
+  "parameters" : {
+    "osDiskVhdName" : {
+      "type" : "String",
+      "metadata" : {
+        "description" : "Name of the OS VHD"
+      },
+      "defaultValue" : "instantiate/2c69e20e-4671-43a8-9ac9-1f93daa8b5a3-vm-161418/INSTANTIATE_SNAPSHOT_ON_CLOUD_2c69e20e-4671-43a8-9ac9-1f93daa8b5a3-vm-161418:::44/2c69e20e-4671-43a8-9ac9-1f93daa8b5a3-vm-161418-2000/KWMMXLMVC2302.na.paccar.com.vhd"
+    },
+    "dataDiskVhdNames" : {
+      "type" : "Array",
+      "metadata" : {
+        "description" : "List of names of the data disk VHDs"
+      },
+      "defaultValue" : [ "instantiate/2c69e20e-4671-43a8-9ac9-1f93daa8b5a3-vm-161418/INSTANTIATE_SNAPSHOT_ON_CLOUD_2c69e20e-4671-43a8-9ac9-1f93daa8b5a3-vm-161418:::44/2c69e20e-4671-43a8-9ac9-1f93daa8b5a3-vm-161418-2001/KWMMXLMVC2302.na.paccar.com_1.vhd" ]
+    },
+    "osType" : {
+      "type" : "string",
+      "allowedValues" : [ "Windows", "Linux" ],
+      "metadata" : {
+        "description" : "Type of OS on the existing vhd"
+      },
+      "defaultValue" : "Windows"
+    },
+    "virtualNetworkId" : {
+      "type" : "String",
+      "defaultValue" : "/subscriptions/d98169ae-d0f9-4b05-a540-4c9ad423367c/resourceGroups/rg-av-az-itdren-uswest2-ds-mgt-vnet-243739/providers/Microsoft.Network/virtualNetworks/az-itdren-uswest2-ds-mgt-vnet"
+    },
+    "networkSecurityGroupId" : {
+      "type" : "String",
+      "defaultValue" : "/subscriptions/d98169ae-d0f9-4b05-a540-4c9ad423367c/resourceGroups/rg-itdren-kenmex-rubrik-cloudon/providers/Microsoft.Network/networkSecurityGroups/rubrik-cloud-on-kenmex-nsg"
+    },
+    "subnetName" : {
+      "type" : "String",
+      "defaultValue" : "az-itdren-uswest2-ds-mgt-vnet-rubrik-cloudon-subnet-1"
+    },
+    "vmName" : {
+      "type" : "String",
+      "defaultValue" : "KWMMXLMVC2302napac-48ead420f8-1687943173491"
+    },
+    "nicName" : {
+      "type" : "String",
+      "defaultValue" : "KWMMXLMVC2302napac-48ead420f8-nic-1687943173491"
+    },
+    "publicIPAddressName" : {
+      "type" : "String",
+      "defaultValue" : "KWMMXLMVC2302napac-48ead420f8-publicIp-1687943173491"
+    },
+    "osDiskName" : {
+      "type" : "String",
+      "defaultValue" : "KWMMXLMVC2302napac-48ead420f8-osDisk-1687943173491"
+    },
+    "dataDiskName" : {
+      "type" : "Array",
+      "metadata" : {
+        "description" : "List of data disk names to attach to the instance"
+      },
+      "defaultValue" : [ "KWMMXLMVC2302napac-48ead420f8-dataDisk-0-1687943173491" ]
+    },
+    "storageAccountName" : {
+      "type" : "String",
+      "defaultValue" : "stgkenmexrubrikcloudon"
+    },
+    "vmSize" : {
+      "type" : "String",
+      "defaultValue" : "Standard_A2m_v2"
+    },
+    "storageAccountContainerName" : {
+      "type" : "String",
+      "defaultValue" : "kenmexrubrikcloudoncontainer"
+    },
+    "storageEndpoint" : {
+      "type" : "String",
+      "defaultValue" : ".core.windows.net"
+    },
+    "tagFields" : {
+      "type" : "object",
+      "defaultValue" : {
+        "rk_host_name" : "kwmp71lxa.na.paccar.com",
+        "snappable_type" : "VmwareVirtualMachine",
+        "rk_snapshot_time" : "1687937749399",
+        "rk_version" : "8.1.0-p1-23921",
+        "rk_snappable_id" : "2c69e20e-4671-43a8-9ac9-1f93daa8b5a3-vm-161418",
+        "rk_cluster_id" : "281a9672-f1db-44e0-9ed5-b11c0f699d88",
+        "location_unique_id" : "stgkenmexrubrikarchive:kenmexrubrikarchivecontainer",
+        "rk_snapshot_id" : "6d0e62c9-a66a-4672-a9d9-8e2d2f5fef84",
+        "rk_instance_class" : "PolicyBasedImage",
+        "rk_object_name" : "KWMMXLMVC2302.na.paccar.com",
+        "rk_job_id" : "INSTANTIATE_SNAPSHOT_ON_CLOUD_2c69e20e-4671-43a8-9ac9-1f93daa8b5a3-vm-161418:::44"
+      }
+    }
+  },
+  "variables" : {
+    "diskCaching" : "ReadWrite",
+    "addressPrefix" : "10.0.0.0/16",
+    "publicIPAddressType" : "Dynamic",
+    "vmSize" : "[parameters('vmSize')]",
+    "subnetRef" : "[concat(parameters('virtualNetworkId'),'/subnets/',parameters('subnetName'))]",
+    "apiVersion" : "2017-03-30",
+    "osDiskUri" : "[concat('http://', parameters('storageAccountName'), '.blob', parameters('storageEndpoint'), '/', parameters('storageAccountContainerName'), '/', parameters('osDiskVhdName'))]"
+  },
+  "outputs" : {
+    "vmId" : {
+      "type" : "String",
+      "value" : "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+    }
+  },
+  "resources" : [ {
+    "type" : "Microsoft.Network/networkInterfaces",
+    "name" : "[parameters('nicName')]",
+    "apiVersion" : "2017-06-01",
+    "location" : "[resourceGroup().location]",
+    "tags" : "[parameters('tagFields')]",
+    "properties" : {
+      "ipConfigurations" : [ {
+        "name" : "eth0",
+        "properties" : {
+          "privateIPAllocationMethod" : "Dynamic",
+          "subnet" : {
+            "id" : "[variables('subnetRef')]"
+          }
+        }
+      } ],
+      "networkSecurityGroup" : {
+        "id" : "[parameters('networkSecurityGroupId')]"
+      }
+    }
+  }, {
+    "type" : "Microsoft.Compute/disks",
+    "sku" : {
+      "name" : "Standard_LRS"
+    },
+    "name" : "[parameters('osDiskName')]",
+    "apiVersion" : "2017-03-30",
+    "location" : "[resourceGroup().location]",
+    "tags" : "[parameters('tagFields')]",
+    "properties" : {
+      "creationData" : {
+        "createOption" : "Import",
+        "sourceUri" : "[variables('osDiskUri')]"
+      }
+    }
+  }, {
+    "type" : "Microsoft.Compute/disks",
+    "sku" : {
+      "name" : "Standard_LRS"
+    },
+    "name" : "[parameters('dataDiskName')[copyIndex()]]",
+    "apiVersion" : "2017-03-30",
+    "location" : "[resourceGroup().location]",
+    "tags" : "[parameters('tagFields')]",
+    "copy" : {
+      "name" : "dataDiskCopyOp",
+      "count" : "[length(parameters('dataDiskVhdNames'))]"
+    },
+    "properties" : {
+      "creationData" : {
+        "createOption" : "Import",
+        "sourceUri" : "[concat('http://', parameters('storageAccountName'), '.blob', parameters('storageEndpoint'), '/', parameters('storageAccountContainerName'), '/', parameters('dataDiskVhdNames')[copyIndex()])]"
+      }
+    }
+  }, {
+    "type" : "Microsoft.Compute/virtualMachines",
+    "name" : "[parameters('vmName')]",
+    "apiVersion" : "2017-03-30",
+    "location" : "[resourceGroup().location]",
+    "tags" : "[parameters('tagFields')]",
+    "properties" : {
+      "hardwareProfile" : {
+        "vmSize" : "[variables('vmSize')]"
+      },
+      "storageProfile" : {
+        "osDisk" : {
+          "name" : "[parameters('osDiskName')]",
+          "osType" : "[parameters('osType')]",
+          "managedDisk" : {
+            "id" : "[resourceId('Microsoft.Compute/disks/', parameters('osDiskName'))]"
+          },
+          "caching" : "ReadWrite",
+          "createOption" : "attach"
+        },
+        "copy" : [ {
+          "name" : "dataDisks",
+          "count" : "[length(parameters('dataDiskVhdNames'))]",
+          "input" : {
+            "name" : "[parameters('dataDiskName')[copyIndex('dataDisks')]]",
+            "lun" : "[copyIndex('dataDisks')]",
+            "createOption" : "attach",
+            "caching" : "ReadWrite",
+            "managedDisk" : {
+              "id" : "[resourceId('Microsoft.Compute/disks/', parameters('dataDiskName')[copyIndex('dataDisks')])]"
+            }
+          }
+        } ]
+      },
+      "networkProfile" : {
+        "networkInterfaces" : [ {
+          "id" : "[resourceId('Microsoft.Network/networkInterfaces',parameters('nicName'))]"
+        } ]
+      },
+      "diagnosticsProfile" : {
+        "bootDiagnostics" : {
+          "enabled" : false
+        }
+      }
+    },
+    "dependsOn" : [ "[concat('Microsoft.Network/networkInterfaces/', parameters('nicName'))]", "[concat('Microsoft.Compute/disks/', parameters('osDiskName'))]", "dataDiskCopyOp" ]
+  } ]
+}
