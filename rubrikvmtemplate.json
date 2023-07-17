@@ -34,7 +34,7 @@
     },
     "subnetName" : {
       "type" : "String",
-      "defaultValue" : "az-itdren-uswest2-ds-mgt-vnet-rubrik-cloudon-subnet-1"
+      "defaultValue" : ""
     },
     "vmName" : {
       "type" : "String",
