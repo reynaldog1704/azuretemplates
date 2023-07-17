@@ -26,15 +26,15 @@
     },
     "virtualNetworkId" : {
       "type" : "String",
-      "defaultValue" : "/subscriptions/15efa40c-515b-4e75-b6b6-63c64ce108cc/resourceGroups/rg-av-az-itdren-uswest2-ds-iaas-test-376625/providers/Microsoft.Network/virtualNetworks/az-itdren-uswest2-ds-iaas-test"
+      "defaultValue" : ""
     },
     "networkSecurityGroupId" : {
       "type" : "String",
-      "defaultValue" : "/subscriptions/15efa40c-515b-4e75-b6b6-63c64ce108cc/resourceGroups/rg-av-az-itdren-uswest2-ds-iaas-test/providers/Microsoft.Network/networkSecurityGroups/nsg-itdren-kenmex-test"
+      "defaultValue" : ""
     },
     "subnetName" : {
       "type" : "String",
-      "defaultValue" : "az-itdren-uswest2-ds-iaas-test"
+      "defaultValue" : ""
     },
     "vmName" : {
       "type" : "String",
