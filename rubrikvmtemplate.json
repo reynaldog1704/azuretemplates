@@ -34,7 +34,7 @@
     },
     "subnetName" : {
       "type" : "String",
-      "defaultValue" : ""
+      "defaultValue" : "default"
     },
     "vmName" : {
       "type" : "String",
