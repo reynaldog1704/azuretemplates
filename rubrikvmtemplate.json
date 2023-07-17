@@ -30,7 +30,7 @@
     },
     "networkSecurityGroupId" : {
       "type" : "String",
-      "defaultValue" : ""
+      "defaultValue" : "/subscriptions/d98169ae-d0f9-4b05-a540-4c9ad423367c/resourceGroups/rg-itdren-kenmex-rubrik-cloudon/providers/Microsoft.Network/networkSecurityGroups/rubrik-cloud-on-kenmex-nsg"
     },
     "subnetName" : {
       "type" : "String",
